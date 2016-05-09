@@ -6,7 +6,13 @@
 		var errorCallback = config.errorCallback || function() {};
 		var inputBufferLength = config.inputBufferLength || 4096;
 		var outputBufferLength = config.outputBufferLength || 4000;
-		var audioDebugger = null;
+		
+		this.getSampleRate = function() {
+			return {
+				input: this.context.sampleRate,
+				output: config.outputSampleRate || 16000
+			};
+		};
 		
 		this.context = source.context;
 		this.node = this.context.createScriptProcessor(inputBufferLength);
@@ -68,22 +74,10 @@
 						data: e.data.data
 					});
 				});
-				
-				if(audioDebugger != null)
-					audioDebugger.process(e.data.data);
 			}
 		};
 		source.connect(this.node);
 		this.node.connect(this.context.destination);
-		
-		this.enableDebug = function(canvas) {
-			audioDebugger = new AudioDebugger({
-				canvas: canvas,
-				bufferLength: outputBufferLength,
-				sampleRate: (config.outputSampleRate || 16000)
-			});
-			return audioDebugger;
-		};
 	};
 	
 	window.AudioRecorder = AudioRecorder;
