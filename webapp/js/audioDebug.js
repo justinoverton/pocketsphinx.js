@@ -37,7 +37,7 @@
     
     for(var i = 0; i < buffer.length; i++) {
     
-      var v = buffer[i] / 128.0;
+      var v = buffer[i] / 16383 + 1;
       var y = v * h/2;
 
       if(i === 0) {
